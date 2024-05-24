@@ -145,21 +145,24 @@ static long __stdcall detour_present(IDXGISwapChain* p_swap_chain, UINT sync_int
 	if (ImGui::IsKeyPressed(ImGuiKey_Insert, false))
 		c_menu.MENU_OPEN = !c_menu.MENU_OPEN;
 
-	//c_menu.boot(); // booting animation
+		c_menu.boot(); 
 
-	if (!c_menu.ISBOOTING)
+	//c_menu.ISBOOTING = false;
+
+	//if (!c_menu.ISBOOTING)
 	{
 		ImGuiStyle& style = ImGui::GetStyle();
 		static float cAlpha{ 0.0f };
 		static float frequency{ 1 / 0.15f };
 
-		if (ImGui::IsKeyPressed(ImGuiKey_Insert, false))
+		if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Insert), false)) {
 			c_menu.MENU_OPEN = !c_menu.MENU_OPEN;
+		}
 
 		if (c_menu.MENU_OPEN)
 		{
 			cAlpha = calculateAlpha(cAlpha + frequency * ImGui::GetIO().DeltaTime);
-			style.Alpha = cAlpha;
+			c_menu.alpha = style.Alpha = cAlpha;
 
 			c_renderer.render();
 			//DrawMenu();
@@ -168,7 +171,7 @@ static long __stdcall detour_present(IDXGISwapChain* p_swap_chain, UINT sync_int
 		{
 			if ((style.Alpha >= 0))
 			{
-				style.Alpha = cAlpha;
+				c_menu.alpha = style.Alpha = cAlpha;
 				cAlpha = calculateAlpha(cAlpha + -frequency * ImGui::GetIO().DeltaTime);
 
 				c_renderer.render();
@@ -176,7 +179,7 @@ static long __stdcall detour_present(IDXGISwapChain* p_swap_chain, UINT sync_int
 			}
 			else
 			{
-				style.Alpha = 0;
+				c_menu.alpha = style.Alpha = 0;
 			}
 		}
 	}
@@ -218,7 +221,6 @@ int WINAPI main()
 	printf("[Scarlett] Console Allocated!\n");
 
 		c_menu.ISBOOTING = true;
-		Sleep(3000);
 	if (!get_present_pointer())
 	{		
 		return 1;
