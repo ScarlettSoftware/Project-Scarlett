@@ -20,6 +20,7 @@ void renderer::setup_fonts()
     c_menu.set_font("comboinlabel", io.Fonts->AddFontFromMemoryTTF(inter_font, sizeof(inter_font), 15));
     c_menu.set_font("comboitemarrow", io.Fonts->AddFontFromMemoryTTF(scarlett_icons, sizeof(scarlett_icons), 12));
     c_menu.set_font("biglogo", io.Fonts->AddFontFromMemoryTTF(scarlett_icons, sizeof(scarlett_icons), 88));
+    c_menu.set_font("keybindselection", io.Fonts->AddFontFromMemoryTTF(inter_font, sizeof(inter_font), 15));
 
     io.Fonts->Build();
 }
@@ -82,6 +83,7 @@ void renderer::setup()
 
 void renderer::render()
 {
+
     c_menu.begin("Scarlett");
 
     switch (c_menu.MAIN_SELECTION)
@@ -98,7 +100,7 @@ void renderer::render()
         case 0: // Legitbot
             c_menu.begin_child("Global", "G", { LEFT, HALF });
             {
-                c_menu.add_keybind("Enabled", &c_cfg.get<bool>("legitbot_global_enabled"), ImGuiKey_E);
+                c_menu.add_keybind("Enabled", & c_cfg.get_keybind<std::vector<int>>("legitbot_global_enabled"), ImGuiKey_E);
                 c_menu.add_slider("Field of view", &c_cfg.get<int>("legitbot_fov"), 1, 180, " ");
                 c_menu.add_checkbox("Silent aim", &c_cfg.get<bool>("legitbot_silent_aim"));
                 c_menu.add_checkbox("Automatic fire", &c_cfg.get<bool>("legitbot_automatic_fire"));
@@ -109,7 +111,7 @@ void renderer::render()
             c_menu.begin_child("Triggerbot", "H", { HALFLEFT, HALF });
             {
                 c_menu.add_checkbox("Enabled", &c_cfg.get<bool>("legitbot_triggerbot_enabled"));
-                c_menu.add_keybind("Triggerbot on key", &c_cfg.get<bool>("legitbot_triggerbot_on_key"), ImGuiKey_E);
+                c_menu.add_keybind("Triggerbot on key", &c_cfg.get_keybind<std::vector<int>>("legitbot_triggerbot_on_key"), ImGuiKey_E);
                 c_menu.add_slider("Field of view ", &c_cfg.get<int>("legitbot_triggerbot_fov"), 1, 180, "");
                 c_menu.add_slider("Delay", &c_cfg.get<int>("legitbot_triggerbot_delay"), 1, 1000, "ms");
 
@@ -136,12 +138,12 @@ void renderer::render()
         case 1: // Ragebot
             c_menu.begin_child("Global", "G", { LEFT, FULL });
             {
-                c_menu.add_keybind("Enabled", &c_cfg.get<bool>("ragebot_global_enabled"), ImGuiKey_E);
-                c_menu.add_slider("Field of view ", &c_cfg.get<int>("ragebot_fov"), 1, 180, "°");
+                c_menu.add_keybind("Enabled", &c_cfg.get_keybind<std::vector<int>>("ragebot_global_enabled"), ImGuiKey_E);
+                c_menu.add_slider("Field of view ", &c_cfg.get<int>("ragebot_fov"), 1, 180, "Â°");
                 c_menu.add_checkbox("Silent aim ", &c_cfg.get<bool>("ragebot_silent_aim"));
                 c_menu.add_checkbox("Automatic fire ", &c_cfg.get<bool>("ragebot_automatic_fire"));
                 c_menu.add_checkbox("Automatic scope ", &c_cfg.get<bool>("ragebot_automatic_scope"));
-                c_menu.add_keybind("Prefer body aim", &c_cfg.get<bool>("ragebot_"), ImGuiKey_E);
+                c_menu.add_keybind("Prefer body aim", &c_cfg.get_keybind<std::vector<int>>("ragebot_"), ImGuiKey_E);
             }
             c_menu.end_child();
 
@@ -191,23 +193,20 @@ void renderer::render()
                 }
                 
                 c_menu.add_checkbox("Freestanding", &c_cfg.get<bool>("anti_aim_global_freestand"));
-                c_menu.add_keybind("Slow walk", &c_cfg.get<bool>("anti_aim_misc_slow_walk"), ImGuiKey_E);
+                c_menu.add_keybind("Slow walk", &c_cfg.get_keybind<std::vector<int>>("anti_aim_misc_slow_walk"), ImGuiKey_E);
             }
             c_menu.end_child();
 
             c_menu.begin_child("Other", "O", { RIGHT, FULL });
             {
-                static ImColor kys;
-                c_menu.add_colorpicker("Direction Indicator", &kys);
-                c_menu.add_slider("Indicator size", &c_cfg.get<int>("visuals_world_fov"), 1, 120, " ");
-                c_menu.add_keybind("Anti-Aim back", &c_cfg.get<bool>("anti_aim_other_back"), ImGuiKey_E);
-                c_menu.add_keybind("Anti-Aim left", &c_cfg.get<bool>("anti_aim_other_left"), ImGuiKey_E);
-                c_menu.add_keybind("Anti-Aim right", &c_cfg.get<bool>("anti_aim_other_right"), ImGuiKey_E);
-                c_menu.add_keybind("Anti-Aim forward", &c_cfg.get<bool>("anti_aim_other_forward"), ImGuiKey_E);
+                c_menu.add_colorpicker("Direction Indicator", &c_cfg.get_color<ImU32>("anti_aim_other_indicator_colorpicker"));
+                c_menu.add_slider("Indicator size", &c_cfg.get<int>("anti_aim_other_indicator_size"), 1, 120, " ");
+                c_menu.add_keybind("Anti-Aim back", &c_cfg.get_keybind<std::vector<int>>("anti_aim_other_back"), ImGuiKey_E);
+                c_menu.add_keybind("Anti-Aim left", &c_cfg.get_keybind<std::vector<int>>("anti_aim_other_left"), ImGuiKey_E);
+                c_menu.add_keybind("Anti-Aim right", &c_cfg.get_keybind<std::vector<int>>("anti_aim_other_right"), ImGuiKey_E);
+                c_menu.add_keybind("Anti-Aim forward", &c_cfg.get_keybind<std::vector<int>>("anti_aim_other_forward"), ImGuiKey_E);
             }
             c_menu.end_child();
-
-
             break;
 
         }
@@ -281,7 +280,7 @@ void renderer::render()
             {
                 c_menu.add_slider("Field of view", &c_cfg.get<int>("visuals_world_fov"), 1, 120, " ");
                 c_menu.add_slider("Override zoom", &c_cfg.get<int>("visuals_world_override_zoom"), 1, 100, " ");
-                c_menu.add_checkbox("Thirdperson", &c_cfg.get<bool>("visuals_world_thirdperson"));
+                c_menu.add_keybind("Thirdperson", &c_cfg.get_keybind<std::vector<int>>("visuals_world_thirdperson"), ImGuiKey_E);
                 if (c_cfg.get<bool>("visuals_world_thirdperson"))
                 {
                     c_menu.add_slider("Thirdperson Distance", &c_cfg.get<int>("visuals_world_thirdperson_distance"), 1, 100, " ");
@@ -291,9 +290,7 @@ void renderer::render()
 
             c_menu.begin_child("World", "N", { HALFLEFT, HALF });
             {
-                static ImColor kys2;
                 c_menu.add_slider("Nightmode", &c_cfg.get<int>("visuals_world_nightmode"), 1, 100, " ");
-                c_menu.add_colorpicker("Post processing", &kys2);
                 c_menu.add_slider("Asus walls", &c_cfg.get<int>("visuals_world_asus_walls"), 1, 100, " ");
                 c_menu.add_slider("Asus props", &c_cfg.get<int>("visuals_world_asus_props"), 1, 100, " ");
             }
@@ -301,13 +298,12 @@ void renderer::render()
 
             c_menu.begin_child("World ESP", "P", { RIGHT, HALF });
             {
-                static ImColor kys3;
-                static ImColor kys4;
+
                 c_menu.add_checkbox("Bomb", &c_cfg.get<bool>("visuals_worldesp_bomb"));
                 c_menu.add_checkbox("Grenades", &c_cfg.get<bool>("visuals_worldesp_grenades"));
-                c_menu.add_checkbox("Weapons", &c_cfg.get<bool>("visuals_worldesp_bomb"));
-                c_menu.add_colorpicker("Grenade warning", &kys3);
-                c_menu.add_colorpicker("Grenade prediction", &kys4);
+                c_menu.add_checkbox("Weapons", &c_cfg.get<bool>("visuals_worldesp_weapons"));
+                c_menu.add_colorpicker("Grenade warning", &c_cfg.get_color<ImU32>("visuals_worldesp_grenade_warning"));
+                c_menu.add_colorpicker("Grenade prediction", &c_cfg.get_color<ImU32>("visuals_worldesp_grenade_prediction"));
             }
             c_menu.end_child();
 
@@ -321,7 +317,6 @@ void renderer::render()
             c_menu.end_child();
             break;
         }
-
         c_menu.selection_end();
         break;
     }
@@ -338,11 +333,11 @@ void renderer::render()
         switch (SUBTAB_SELECTION)
         {
         case 0: // Misc -> General
-            c_menu.begin_child("Configuration", "S", { LEFT, FULLX2 });
+            c_menu.begin_child("Configuration", "S", { LEFT, HALF });
             {
 
                 c_menu.add_combo("Slot", &c_cfg.get<int>("misc_configuration_slot"), { "0", "1", "2", "3", "4", "5" });
-                /*
+               
                 if (c_menu.add_button("Save Slot " + std::to_string(c_cfg.get<int>("misc_configuration_slot"))))
                 {
                     c_cfg.save(("slot_" + std::to_string(c_cfg.get<int>("misc_configuration_slot"))));
@@ -357,7 +352,7 @@ void renderer::render()
                 {
                     c_cfg.load(("slot_" + std::to_string(c_cfg.get<int>("misc_configuration_slot"))));
                 }
-                */
+               
 
             }
             c_menu.end_child();
@@ -371,7 +366,7 @@ void renderer::render()
                 c_menu.add_checkbox("Auto Buy", &c_cfg.get<bool>("misc_auto_buy"));
                 if (c_cfg.get<bool>("misc_auto_buy"))
                 {
-                    c_menu.add_multicombo("Primary", &c_cfg.get<std::vector<bool>>("misc_auto_buy_primary"), { "AK47/M4A4/M4A1-S", "AWP", "GALIL/FAMAS", "G3SG1/SCAR20", "Scout" });
+                    c_menu.add_multicombo("Primary", &c_cfg.get<std::vector<bool>>("misc_auto_buy_primary"), { "Ak-47","M4A4", "AWP", "GALIL/FAMAS", "G3SG1/SCAR20", "Scout"});
                     c_menu.add_multicombo("Secondary", &c_cfg.get<std::vector<bool>>("misc_auto_buy_secondary"), { "CZ-75/TEC9/Five Seven", "Dual Berettas", "Desert Eagle/Revolver", "Glock/USP" });
                     c_menu.add_multicombo("Utilities", &c_cfg.get<std::vector<bool>>("misc_auto_buy_utilities"), { "Helmet", "Kevlar", "Smoke Grenade", "He Grenade", "Molotov", "Defuser", "Taser" });
                 }
@@ -380,14 +375,14 @@ void renderer::render()
             c_menu.end_child();
 
             c_menu.begin_child("Menu", "T", { RIGHT, HALF });
-            {
-                static ImColor kys5;
-                c_menu.add_colorpicker("Accent Color", &kys5);
-                c_menu.add_keybind("Menu Key", &c_cfg.get<bool>("misc_menu_menu_key"), ImGuiKey_E);
+            {               
+                c_menu.add_colorpicker("Accent Color", &c_cfg.get_color<ImU32>("misc_menu_accent_color"));
+                c_menu.set_accentcolor(c_cfg.get_color<ImU32>("misc_menu_accent_color"));
+                c_menu.add_keybind("Menu Key", &c_cfg.get_keybind<std::vector<int>>("misc_menu_menu_key"), ImGuiKey_E);
                 c_menu.add_checkbox("Menu Glow", &c_cfg.get<bool>("misc_menu_glow"));
                 if (c_cfg.get<bool>("misc_menu_glow")) 
                 {
-                    c_menu.add_colorpicker("Menu Glow Color", &kys5);
+                    c_menu.add_colorpicker("Menu Glow Color", &c_cfg.get_color<ImU32>("misc_menu_glow_color"));
                 }
             }
             c_menu.end_child();
@@ -397,14 +392,14 @@ void renderer::render()
                 c_menu.add_checkbox("Bunny Hop", &c_cfg.get<bool>("misc_bunny_hop"));
                 c_menu.add_checkbox("Auto Strafe", &c_cfg.get<bool>("misc_auto_strafe"));
                 c_menu.add_combo("Strafe Mode", &c_cfg.get<int>("misc_movement_strafe_mode"), { "Legit","Rage","Directional" });
-                c_menu.add_checkbox("Quick-Peek Assist", &c_cfg.get<bool>("misc_quick_peek_assist"));
-                c_menu.add_keybind("Edge Jump", &c_cfg.get<bool>("misc_movement_edgejump"), ImGuiKey_E);
+                c_menu.add_keybind("Quick-Peek Assist", &c_cfg.get_keybind<std::vector<int>>("misc_quick_peek_assist"), ImGuiKey_E);
+                c_menu.add_keybind("Edge Jump", &c_cfg.get_keybind<std::vector<int>>("misc_movement_edgejump"), ImGuiKey_E);
                 c_menu.add_checkbox("Scarlett-Bot", &c_cfg.get<bool>("misc_scarlett_ai_bot"));
             }
             c_menu.end_child();
             break;
         case 1:
-            c_menu.begin_child("General", "O", { LEFT, FULLX2 });
+            c_menu.begin_child("General", "O", { FULL, FULLX2 });
             {
 
             }
