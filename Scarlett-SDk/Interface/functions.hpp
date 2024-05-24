@@ -15,9 +15,9 @@
 using namespace std;
 using namespace chrono;
 
-int ACCENT_R = 255;
-int ACCENT_G = 0;
-int ACCENT_B = 0;
+static int ACCENT_R = 255;
+static int ACCENT_G = 0;
+static int ACCENT_B = 0;
 
 #define getArraySize(array) (sizeof(array) / sizeof((array)[0]))
 
@@ -128,7 +128,6 @@ std::string ImGuiKeyToString(int key)
     switch (key)
     {
     case ImGuiKey_None: return "None";
-        // Keyboard
     case ImGuiKey_Tab: return "Tab";
     case ImGuiKey_LeftArrow: return "LeftArrow";
     case ImGuiKey_RightArrow: return "RightArrow";
@@ -137,7 +136,7 @@ std::string ImGuiKeyToString(int key)
     case ImGuiKey_PageUp: return "PageUp";
     case ImGuiKey_PageDown: return "PageDown";
     case ImGuiKey_Home: return "Home";
-    //case ImGuiKey_End: return "End"; // CUZ IF PRESS PROCESS GO BRRR *crash*
+    case ImGuiKey_End: return "End";
     case ImGuiKey_Insert: return "Ins";
     case ImGuiKey_Delete: return "Del";
     case ImGuiKey_Backspace: return "Backspace";
@@ -229,16 +228,16 @@ std::string ImGuiKeyToString(int key)
     case ImGuiKey_NumLock: return "NumLock";
     case ImGuiKey_PrintScreen: return "PrintScreen";
     case ImGuiKey_Pause: return "Pause";
-    case ImGuiKey_Keypad0: return "0";
-    case ImGuiKey_Keypad1: return "1";
-    case ImGuiKey_Keypad2: return "2";
-    case ImGuiKey_Keypad3: return "3";
-    case ImGuiKey_Keypad4: return "4";
-    case ImGuiKey_Keypad5: return "5";
-    case ImGuiKey_Keypad6: return "6";
-    case ImGuiKey_Keypad7: return "7";
-    case ImGuiKey_Keypad8: return "8";
-    case ImGuiKey_Keypad9: return "9";
+    case ImGuiKey_Keypad0: return "Keypad0";
+    case ImGuiKey_Keypad1: return "Keypad1";
+    case ImGuiKey_Keypad2: return "Keypad2";
+    case ImGuiKey_Keypad3: return "Keypad3";
+    case ImGuiKey_Keypad4: return "Keypad4";
+    case ImGuiKey_Keypad5: return "Keypad5";
+    case ImGuiKey_Keypad6: return "Keypad6";
+    case ImGuiKey_Keypad7: return "Keypad7";
+    case ImGuiKey_Keypad8: return "Keypad8";
+    case ImGuiKey_Keypad9: return "Keypad9";
     case ImGuiKey_KeypadDecimal: return "KeypadDecimal";
     case ImGuiKey_KeypadDivide: return "KeypadDivide";
     case ImGuiKey_KeypadMultiply: return "KeypadMultiply";
@@ -248,10 +247,6 @@ std::string ImGuiKeyToString(int key)
     case ImGuiKey_KeypadEqual: return "KeypadEqual";
     case ImGuiKey_AppBack: return "AppBack";
     case ImGuiKey_AppForward: return "AppForward";
-
-        // Gamepad
-
-    /*
     case ImGuiKey_GamepadStart: return "GamepadStart";
     case ImGuiKey_GamepadBack: return "GamepadBack";
     case ImGuiKey_GamepadFaceLeft: return "GamepadFaceLeft";
@@ -276,20 +271,17 @@ std::string ImGuiKeyToString(int key)
     case ImGuiKey_GamepadRStickRight: return "GamepadRStickRight";
     case ImGuiKey_GamepadRStickUp: return "GamepadRStickUp";
     case ImGuiKey_GamepadRStickDown: return "GamepadRStickDown";
-     */
-
-        // Mice
-    case ImGuiKey_MouseLeft: return "Mouse 1";
-    case ImGuiKey_MouseRight: return "Mouse 2";
-    case ImGuiKey_MouseMiddle: return "Mouse 3";
-    case ImGuiKey_MouseX1: return "Mouse 4";
-    case ImGuiKey_MouseX2: return "Mouse 5";
-    //case ImGuiKey_MouseWheelX: return "MouseWheel 1";
-    //case ImGuiKey_MouseWheelY: return "MouseWheel 1";
-    //case ImGuiKey_ReservedForModCtrl: return "ReservedForModCtrl";
-    //case ImGuiKey_ReservedForModShift: return "ReservedForModShift";
-    //case ImGuiKey_ReservedForModAlt: return "ReservedForModAlt";
-    //case ImGuiKey_ReservedForModSuper: return "ReservedForModSuper";
+    case ImGuiKey_MouseLeft: return "MouseLeft";
+    case ImGuiKey_MouseRight: return "MouseRight";
+    case ImGuiKey_MouseMiddle: return "MouseMiddle";
+    case ImGuiKey_MouseX1: return "MouseX1";
+    case ImGuiKey_MouseX2: return "MouseX2";
+    case ImGuiKey_MouseWheelX: return "MouseWheelX";
+    case ImGuiKey_MouseWheelY: return "MouseWheelY";
+    case ImGuiKey_ReservedForModCtrl: return "ReservedForModCtrl";
+    case ImGuiKey_ReservedForModShift: return "ReservedForModShift";
+    case ImGuiKey_ReservedForModAlt: return "ReservedForModAlt";
+    case ImGuiKey_ReservedForModSuper: return "ReservedForModSuper";
     default: return "Unknown";
     };
 }
